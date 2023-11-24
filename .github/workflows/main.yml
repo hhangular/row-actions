@@ -1,4 +1,4 @@
-name: Build hhangular/resizable
+name: Build hhangular/row-actions
 run-name: ${{ github.actor }} run build on ${{ github.repository }}
 on:
   push:

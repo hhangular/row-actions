@@ -6,7 +6,7 @@
 
 [![npm version](https://badge.fury.io/js/@hhangular%2Frow-actions.svg)](https://badge.fury.io/js/@hhangular%2Frow-actions)
 
-## Resize your panels component effortlessly
+## Button bar collapsable component on your table effortlessly
 
 This library contains an angular module `RowActionsModule` that allows you to add a collapsable toolbar actions in angular material table.   
 

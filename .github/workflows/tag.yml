@@ -1,8 +1,8 @@
-name: Publish hhangular/resizable to NPM
+name: Publish hhangular/row-actions to NPM
 run-name: ${{ github.actor }} run build on ${{ github.repository }}
 on:
   push:
-    tags: 
+    tags:
       - '*'
 jobs:
   publish-angular-lib:
