@@ -9,15 +9,12 @@ import { BehaviorSubject, Observable, combineLatestWith, debounceTime, map } fro
     template: `
         <span class="actions-trigger" cdkOverlayOrigin #trigger="cdkOverlayOrigin"></span>
         <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(show$ | async)">
-            <mat-toolbar class="actions-toolbar" [color]="color" (mouseenter)="hover$.next(true)" (mouseleave)="hover$.next(false)" @toolbarAppear>
+            <mat-toolbar [ngStyle]="{height: heightToolbar}" [color]="color" (mouseenter)="hover$.next(true)" (mouseleave)="hover$.next(false)" @toolbarAppear>
                 <ng-content></ng-content>
             </mat-toolbar>
         </ng-template>
     `,
     styles: [`
-        .actions-toolbar {
-            height: 100% !important;
-        }
         .actions-trigger {
             display: flex;
             flex-grow: 1;
@@ -49,6 +46,8 @@ export class RowActionComponent implements AfterViewInit {
     hover$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     show$: Observable<boolean>;
 
+    heightToolbar: string = '48px';
+
     constructor(
         private el: ElementRef,
     ) {
@@ -62,6 +61,7 @@ export class RowActionComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         const parentElement = this.el.nativeElement.parentElement;
         const parentStyle = getComputedStyle(parentElement);
+        this.heightToolbar = parentStyle.height;
         if (this.el.nativeElement.parentElement.children[0] === this.el.nativeElement) {
             this.overlayPositions = [{originY: 'top', originX: 'start', overlayY: 'top', overlayX: 'start'}];
             this.flexGrow = 0;
