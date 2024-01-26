@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable, combineLatestWith, debounceTime, map } fro
     template: `
         <span class="actions-trigger" cdkOverlayOrigin #trigger="cdkOverlayOrigin"></span>
         <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(show$ | async)">
-            <mat-toolbar [ngStyle]="{height: heightToolbar}" [color]="color" (mouseenter)="hover$.next(true)" (mouseleave)="hover$.next(false)" @toolbarAppear>
+            <mat-toolbar [ngStyle]="{height: heightToolbar, minHeight: heightToolbar, maxHeight: heightToolbar}" [color]="color" (mouseenter)="hover$.next(true)" (mouseleave)="hover$.next(false)" @toolbarAppear>
                 <ng-content></ng-content>
             </mat-toolbar>
         </ng-template>
