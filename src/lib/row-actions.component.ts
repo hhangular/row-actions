@@ -1,11 +1,14 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { ConnectedPosition } from '@angular/cdk/overlay';
+import { ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
+import { AsyncPipe, NgStyle } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input } from '@angular/core';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { BehaviorSubject, Observable, combineLatestWith, debounceTime, map } from 'rxjs';
 
 
 @Component({
     selector: 'row-actions',
+    standalone: true,
     template: `
         <span class="actions-trigger" cdkOverlayOrigin #trigger="cdkOverlayOrigin"></span>
         <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(show$ | async)">
@@ -26,6 +29,12 @@ import { BehaviorSubject, Observable, combineLatestWith, debounceTime, map } fro
             display: flex;
         }
    `],
+   imports: [
+    AsyncPipe,
+    NgStyle,
+    MatToolbarModule,
+    OverlayModule,
+   ],
     animations: [
         trigger('toolbarAppear', [
             transition(':enter', [
@@ -62,11 +71,11 @@ export class RowActionComponent implements AfterViewInit {
         const parentElement = this.el.nativeElement.parentElement;
         const parentStyle = getComputedStyle(parentElement);
         this.heightToolbar = parentStyle.height;
-        if (this.el.nativeElement.parentElement.children[0] === this.el.nativeElement) {
+        if (this.el.nativeElement.parentElement.childNodes[0] === this.el.nativeElement) { // We're left
             this.overlayPositions = [{originY: 'top', originX: 'start', overlayY: 'top', overlayX: 'start'}];
             this.flexGrow = 0;
             this.left = -parseFloat(parentStyle.paddingLeft);
-        } else if (this.el.nativeElement.parentElement.children[this.el.nativeElement.parentElement.children.length - 1] === this.el.nativeElement) {
+        } else if (this.el.nativeElement.parentElement.childNodes[this.el.nativeElement.parentElement.childNodes.length - 1] === this.el.nativeElement) { // We're right
             this.overlayPositions = [{ originY: 'top', originX: 'end', overlayY: 'top', overlayX: 'end' }];
             this.marginRight = -parseFloat(parentStyle.paddingRight);;
             this.flexGrow = 1;

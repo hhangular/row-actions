@@ -8,7 +8,7 @@
 
 ## Button bar collapsable component on your table effortlessly
 
-This library contains an angular module `RowActionsModule` that allows you to add a collapsable toolbar actions in angular material table.   
+This library contains an standalone angular component `RowActionsComponet` that allows you to add a collapsable toolbar actions in angular material table.   
 
 # Demo
 
@@ -72,15 +72,34 @@ yarn add @hhangular/row-actions
 
 | name | version |
 |---|---|
-| @angular/common | ^16.2.0 |
-| @angular/core | ^16.2.0 |
-| @angular/material | ^16.2.1 |
+| @angular/common | ^17.0.0 |
+| @angular/core | ^17.0.0 |
+| @angular/material | ^17.0.0 |
 
 
 ## Configuration
 
-Just import the module `RowActionsModule` and you can use the `component`.   
-You can do this in your `AppModule` or in your `SharedModule` indifferently.
+Just import the standalone component `RowActionsComponent` and you can use the `component`.   
+You can do this in your `AppModule`, in your `SharedModule` indifferently or directly in other standalone component.
+
+`Component.ts`
+```typescript
+// ================= IMPORT =================
+import {RowActionsComponent} from '@hhangular/row-actions';
+
+@Component({
+  selector: 'app-demo',
+  standalone: true,
+  imports: [RowActionsComponent],
+  template: `
+  ...
+  `,
+})
+export class Component {
+  ...
+}
+```
+
 
 `AppModule.ts`
 ```typescript
@@ -90,7 +109,7 @@ import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {AppComponent} from './app.component';
 // ================= IMPORT =================
-import {RowActionsModule} from '@hhangular/row-actions';
+import {RowActionsComponent} from '@hhangular/row-actions';
 
 @NgModule({
   declarations: [
@@ -101,7 +120,7 @@ import {RowActionsModule} from '@hhangular/row-actions';
     CommonModule,
     HttpClientModule,
 // ================= IMPORT =================
-    RowActionsModule,
+    RowActionsComponent,
   ],
   bootstrap: [AppComponent],
   providers: []
@@ -117,17 +136,17 @@ export class AppModule {
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 // ================= IMPORT =================
-import {RowActionsModule} from '@hhangular/row-actions';
+import {RowActionsComponent} from '@hhangular/row-actions';
 
 @NgModule({
   imports: [
     CommonModule,
 // ================= IMPORT =================
-    RowActionsModule,
+    RowActionsComponent,
   ],
   exports: [
 // ================= EXPORT =================
-    RowActionsModule,
+    RowActionsComponent,
   ],
   declarations: [],
 })
@@ -154,7 +173,7 @@ If you put the <row-actions> in the first position, the toolbar will be appear f
                 <mat-cell *matCellDef="let element">
                     {{element.updatedBy }}
                     <row-actions [open]="element === overflownElement">
-                      <!-- ADD YOUR BUTTONS HERE -->
+                      <!-- ADD YOUR BUTTONS mat-icon-button HERE -->
                       <button mat-icon-button>
                     </row-actions>
 ```

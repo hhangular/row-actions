@@ -1,6 +1,6 @@
 /*
- * Public API Surface of resizable
+ * Public API Surface of row-actions
  */
 
 export {RowActionComponent} from './lib/row-actions.component';
-export {RowActionsModule} from './lib/row-actions.module';
+
