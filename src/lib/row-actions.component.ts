@@ -74,7 +74,7 @@ export class RowActionComponent implements AfterViewInit {
   ) {
     this.show$ = this.open$.pipe(
       combineLatestWith(this.hover$),
-      debounceTime(1),
+      debounceTime(400),
       map(([open, hover]: [boolean, boolean]) => open || hover)
     );
   }
