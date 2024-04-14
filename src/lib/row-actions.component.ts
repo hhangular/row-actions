@@ -3,17 +3,15 @@ import { ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
 import { AsyncPipe, NgStyle } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { BehaviorSubject, Observable, combineLatestWith, debounceTime, map } from 'rxjs';
-
+import { BehaviorSubject, Observable, Subject, combineLatestWith, debounceTime, map } from 'rxjs';
 
 @Component({
   selector: 'row-actions',
   standalone: true,
   template: `
         <span class="actions-trigger" cdkOverlayOrigin #trigger="cdkOverlayOrigin"></span>
-        <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(show$ | async)">
-          <mat-toolbar [ngStyle]="{height: heightToolbar, minHeight: heightToolbar, maxHeight: heightToolbar}" [color]="color"
-            (mouseenter)="hover$.next(true)" (mouseleave)="hover$.next(false)" [@expandFromRight]="animatedFrom" [@expandFromLeft]="animatedFrom">
+        <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(open$ | async)">
+          <mat-toolbar [ngStyle]="{height: heightToolbar, minHeight: heightToolbar, maxHeight: heightToolbar}" [color]="color" [@expandFromRight]="animatedFrom" [@expandFromLeft]="animatedFrom">
               <ng-content></ng-content>
           </mat-toolbar>
         </ng-template>
@@ -54,11 +52,11 @@ import { BehaviorSubject, Observable, combineLatestWith, debounceTime, map } fro
 })
 export class RowActionComponent implements AfterViewInit {
 
+  matRowElement: any;
+
   overlayPositions: ConnectedPosition[] = [{ originY: 'top', originX: 'end', overlayY: 'top', overlayX: 'end' }];
 
-  open$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  hover$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  show$: Observable<boolean>;
+  open$: Subject<boolean> = new Subject<boolean>();
 
   heightToolbar: string = '48px';
 
@@ -69,19 +67,14 @@ export class RowActionComponent implements AfterViewInit {
 
   animatedFrom: 'left' | 'right' | null = null;
 
+
   constructor(
     private el: ElementRef,
   ) {
-    this.show$ = this.open$.pipe(
-      combineLatestWith(this.hover$),
-      debounceTime(400),
-      map(([open, hover]: [boolean, boolean]) => open || hover)
-    );
   }
   ngAfterViewInit(): void {
     const parentElement = this.el.nativeElement.parentElement;
     const parentStyle = getComputedStyle(parentElement);
-    // parentElement.childNodes[this.el.nativeElement.parentElement.childNodes.length - 1] === this.el.nativeElement ? 'right' : 'left';
     this.position = parentElement.childNodes[0] === this.el.nativeElement ? 'left' : 'right';
     this.animatedFrom = this.position;
     if (this.position === 'left') {
@@ -96,23 +89,26 @@ export class RowActionComponent implements AfterViewInit {
     if (this.animationDisabled) {
       this.animatedFrom = null;
     }
-    const matRowElement = this.el.nativeElement.closest('tr[mat-row], mat-row');
-    matRowElement.addEventListener('mouseenter', () => {
+    this.matRowElement = this.el.nativeElement.closest('tr[mat-row], mat-row');
+    this.matRowElement.addEventListener('mouseenter', () => {
       const parentStyle = getComputedStyle(parentElement);
       this.heightToolbar = parentStyle.height;
       this.open$.next(true);
-    }, { capture: true, once: false, passive: true });
-    matRowElement.addEventListener('mouseleave', (event: MouseEvent) => {
-      const newTarget = event.relatedTarget;
-      if (!this.hover$.getValue()) {
-        if (matRowElement.contains(newTarget)) {
-          this.open$.next(true);
-        } else {
-          this.open$.next(false);
-        }
-      }
-    }, { capture: true, once: false, passive: true });
+      document.addEventListener('mousemove', this.mouseMoveListener);
+    });
+  }
 
+  mouseMoveListener: EventListenerOrEventListenerObject = ($event: any) => {
+    if (this.matRowElement) {
+      const rect = this.matRowElement.getBoundingClientRect();
+      const isInHorizontalBounds = $event.clientX >= rect.left && $event.clientX <= rect.right;
+      const isInVerticalBounds = $event.clientY >= rect.top && $event.clientY <= rect.bottom;
+      if (isInHorizontalBounds && isInVerticalBounds) {
+        return;
+      }
+    }
+    this.open$.next(false);
+    document.removeEventListener('mousemove', this.mouseMoveListener);
   }
 
   // We're right
