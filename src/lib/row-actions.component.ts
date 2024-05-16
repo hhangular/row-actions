@@ -2,8 +2,9 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
 import { AsyncPipe, NgStyle } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input } from '@angular/core';
+import { ThemePalette } from '@angular/material/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { BehaviorSubject, Observable, Subject, combineLatestWith, debounceTime, map } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'row-actions',
@@ -123,5 +124,5 @@ export class RowActionComponent implements AfterViewInit {
 
 
   @Input()
-  color: string = 'primary';
+  color: ThemePalette = 'primary';
 }

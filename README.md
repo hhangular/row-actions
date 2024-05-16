@@ -26,21 +26,10 @@ This library contains an standalone angular component `RowActionsComponet` that 
                 <mat-header-cell *matHeaderCellDef i18n="@@UPDATED">Updated</mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     {{element.updatedBy }}
-                    <row-actions [open]="element === overflownElement">
+                    <row-actions>
                       <button mat-icon-button>
                     </row-actions>
 ...
-...
-...
-...
-...
-            <mat-row *matRowDef="let element; columns: displayColumns" (mouseenter)="overflownElement = element" (mouseleave)="overflownElement = undefined">
-```
-
-```typescript
-  // In your controller
-  overflownElement: any | undefined;
-
 ```
 
 ## Installation
@@ -163,7 +152,7 @@ You want to add a collapsable toolbar on each row to you mat-table
 
 ---
 
-In a component template just add <row-actions> in cell with row direction (default) where you want that the toolbar appear.
+In a component template just add <row-actions> in cell with row position where you want that the toolbar appear.
 If you put the <row-actions> in the first position, the toolbar will be appear from left, if you put the <row-actions> in last position,  the toolbar will be appear from right.
 
 
@@ -172,38 +161,36 @@ If you put the <row-actions> in the first position, the toolbar will be appear f
                 <mat-header-cell *matHeaderCellDef i18n="@@UPDATED">Updated</mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     {{element.updatedBy }}
-                    <row-actions [open]="element === overflownElement">
+                    <!-- IN THIS CASE THE TOOLBAR APPEAR FROM RIGHT -->
+                    <row-actions>
                       <!-- ADD YOUR BUTTONS mat-icon-button HERE -->
                       <button mat-icon-button>
                     </row-actions>
 ```
 
-Fill input [open] whith overflowElement set by event (mouseenter) et (mouseleave)
-
-
 ```html
-            <mat-row *matRowDef="let element; columns: displayColumns" (mouseenter)="overflownElement = element" (mouseleave)="overflownElement = undefined">
+            <ng-container matColumnDef="updated" stickyEnd>
+                <mat-header-cell *matHeaderCellDef i18n="@@UPDATED">Updated</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <!-- IN THIS CASE THE TOOLBAR APPEAR FROM LEFT -->
+                    <row-actions>
+                      <!-- ADD YOUR BUTTONS mat-icon-button HERE -->
+                      <button mat-icon-button>
+                    </row-actions>
+                    {{element.updatedBy }}
 ```
-
-In controller add `overflowElement`
-
-```typescript
-  // In your controller
-  overflownElement: any | undefined;
-
-```
-
 
 
 ## Inputs
 
 ```html
-<row-actions [open]="isOpen">...</row-actions>
+<row-actions color="warn">...</row-actions>
+<row-actions [color]="'primary'">...</row-actions>
 ```
 
 | name | description | type | sample |
 |---|---|---|---|
-| open | The row-actions is it open | boolean | true |
+| color | The row-actions color | ThemePalette = 'primary' \| 'accent' \| 'warn' \| undefined | 'warn' |
 
 
 ## Outputs
