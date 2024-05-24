@@ -32,8 +32,8 @@
   "peerDependencies": {
     "@angular/animations": "^17.3.9",
     "@angular/common": "^17.3.9",
-    "@angular/cdk": "^17.3.9",
-    "@angular/material": "^17.3.9"
+    "@angular/cdk": "^17.3.9 || ^18.0.0",
+    "@angular/material": "^17.3.9 || ^18.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.7",
