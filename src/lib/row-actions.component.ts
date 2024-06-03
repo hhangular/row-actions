@@ -29,7 +29,7 @@ import { Subject } from 'rxjs';
       flex-grow: 1;
     }
     mat-toolbar {
-      gap: 1em;
+      gap: 0.5em;
     }
   `],
   imports: [
