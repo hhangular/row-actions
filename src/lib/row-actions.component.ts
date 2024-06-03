@@ -10,25 +10,28 @@ import { Subject } from 'rxjs';
   selector: 'row-actions',
   standalone: true,
   template: `
-        <span class="actions-trigger" cdkOverlayOrigin #trigger="cdkOverlayOrigin"></span>
-        <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(open$ | async)">
-          <mat-toolbar [ngStyle]="{height: heightToolbar, minHeight: heightToolbar, maxHeight: heightToolbar}" [color]="color" [@expandFromRight]="animatedFrom" [@expandFromLeft]="animatedFrom">
-              <ng-content></ng-content>
-          </mat-toolbar>
-        </ng-template>
-    `,
+    <span class="actions-trigger" cdkOverlayOrigin #trigger="cdkOverlayOrigin"></span>
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(open$ | async)">
+      <mat-toolbar [ngStyle]="{height: heightToolbar, minHeight: heightToolbar, maxHeight: heightToolbar}" [color]="color" [@expandFromRight]="animatedFrom" [@expandFromLeft]="animatedFrom">
+        <ng-content></ng-content>
+      </mat-toolbar>
+    </ng-template>
+  `,
   styles: [`
-        .actions-trigger {
-            display: flex;
-            flex-grow: 1;
-        }
-        :host {
-            position: relative;
-            height: 100%;
-            margin-top: -2px;
-            display: flex;
-        }
-   `],
+    :host {
+      position: relative;
+      height: 100%;
+      margin-top: -2px;
+      display: flex;
+    }
+    .actions-trigger {
+      display: flex;
+      flex-grow: 1;
+    }
+    mat-toolbar {
+      gap: 1em;
+    }
+  `],
   imports: [
     AsyncPipe,
     NgStyle,
@@ -68,11 +71,8 @@ export class RowActionComponent implements AfterViewInit {
 
   animatedFrom: 'left' | 'right' | null = null;
 
+  constructor(private el: ElementRef) {}
 
-  constructor(
-    private el: ElementRef,
-  ) {
-  }
   ngAfterViewInit(): void {
     const parentElement = this.el.nativeElement.parentElement;
     const parentStyle = getComputedStyle(parentElement);
