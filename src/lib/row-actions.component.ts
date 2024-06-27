@@ -31,16 +31,16 @@ import { ThemePalette } from '@angular/material/core';
     mat-toolbar {
       gap: 0.5em;
     }
-    mat-toolbar ::ng-deep *[mat-icon-button] {
+    ::ng-deep *[mat-icon-button] {
       width: 36px !important;
       line-height: 18px !important;
       height: 36px !important;
       padding: 9px !important;
-      & mat-icon {
-        font-size: 18px !important;
-        width: 18px !important;
-        height: 18px !important;
-      }
+    }
+    ::ng-deep *[mat-icon-button] mat-icon {
+      font-size: 18px !important;
+      width: 18px !important;
+      height: 18px !important;
     }
   `],
   imports: [
