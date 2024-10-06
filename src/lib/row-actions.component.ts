@@ -10,12 +10,14 @@ import { ThemePalette } from '@angular/material/core';
   selector: 'row-actions',
   standalone: true,
   template: `
-    <span class="actions-trigger" cdkOverlayOrigin #trigger="cdkOverlayOrigin"></span>
-    <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(open$ | async)">
-      <mat-toolbar [ngStyle]="{height: heightToolbar, minHeight: heightToolbar, maxHeight: heightToolbar}" [color]="color" [@expandFromRight]="animatedFrom" [@expandFromLeft]="animatedFrom">
-        <ng-content></ng-content>
-      </mat-toolbar>
-    </ng-template>
+    @if (!disabled) {
+      <span class="actions-trigger" cdkOverlayOrigin #trigger="cdkOverlayOrigin"></span>
+      <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(open$ | async)">
+        <mat-toolbar [ngStyle]="{height: heightToolbar, minHeight: heightToolbar, maxHeight: heightToolbar}" [color]="color" [@expandFromRight]="animatedFrom" [@expandFromLeft]="animatedFrom">
+          <ng-content></ng-content>
+        </mat-toolbar>
+      </ng-template>
+    }
   `,
   styles: [`
     :host {
@@ -136,4 +138,7 @@ export class RowActionComponent implements AfterViewInit {
 
   @Input()
   color: ThemePalette = 'primary';
+
+  @Input()
+  disabled: boolean | null = false;
 }

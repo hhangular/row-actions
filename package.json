@@ -21,7 +21,7 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build",
-    "cp:archway-ui": "cp -r dist/* ../../hhdevelopment/archway/archway-ui/node_modules/@hhangular/row-actions/",
+    "cp:archway-ui": "cp -r dist/* ../../softwarity/archway/archway-ui/node_modules/@hhangular/row-actions/",
     "watch": "ng build --watch --configuration development",
     "test": "cross-env CHROME_BIN='/usr/bin/google-chrome' ng test",
     "test:ci": "ng test"
