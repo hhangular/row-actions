@@ -106,9 +106,11 @@ Add the `<row-actions>` component inside a `mat-cell`:
 
 ### Position Behavior
 
-The toolbar automatically detects its position within the cell:
-- **First child** in cell: Toolbar appears from the **left**
-- **Last child** in cell: Toolbar appears from the **right**
+The toolbar automatically detects its position within the cell and animates accordingly:
+- **First child** in cell → Toolbar appears from the **left**
+- **Last child** in cell → Toolbar appears from the **right**
+
+You can place `<row-actions>` in **any cell** of your table, not just a dedicated "actions" column. This allows you to add contextual actions to specific data columns.
 
 ## Examples
 

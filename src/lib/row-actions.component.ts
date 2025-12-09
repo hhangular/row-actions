@@ -1,19 +1,19 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AsyncPipe, NgStyle } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input } from '@angular/core';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {ConnectedPosition, OverlayModule} from '@angular/cdk/overlay';
-import { Subject } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, HostBinding, inject, input } from '@angular/core';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
+import { BehaviorSubject } from 'rxjs';
 import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'row-actions',
   standalone: true,
   template: `
-    @if (!disabled) {
+    @if (!disabled()) {
       <span class="actions-trigger" cdkOverlayOrigin #trigger="cdkOverlayOrigin"></span>
       <ng-template cdkConnectedOverlay [cdkConnectedOverlayPositions]="overlayPositions" [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="!!(open$ | async)">
-        <mat-toolbar [ngStyle]="{height: heightToolbar, minHeight: heightToolbar, maxHeight: heightToolbar}" [color]="color" [@expandFromRight]="animatedFrom" [@expandFromLeft]="animatedFrom">
+        <mat-toolbar [style.height]="heightToolbar" [style.min-height]="heightToolbar" [style.max-height]="heightToolbar" [color]="color()" [@expandFromRight]="animatedFrom" [@expandFromLeft]="animatedFrom">
           <ng-content></ng-content>
         </mat-toolbar>
       </ng-template>
@@ -47,7 +47,6 @@ import { ThemePalette } from '@angular/material/core';
   `],
   imports: [
     AsyncPipe,
-    NgStyle,
     MatToolbarModule,
     OverlayModule,
   ],
@@ -69,76 +68,96 @@ import { ThemePalette } from '@angular/material/core';
 })
 export class RowActionComponent implements AfterViewInit {
 
-  matRowElement: any;
+  private readonly el = inject(ElementRef<HTMLElement>);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private matRowElement: HTMLElement | null = null;
+  private mouseEnterListener: (() => void) | null = null;
 
   overlayPositions: ConnectedPosition[] = [{ originY: 'top', originX: 'end', overlayY: 'top', overlayX: 'end' }];
 
-  open$: Subject<boolean> = new Subject<boolean>();
+  open$ = new BehaviorSubject<boolean>(false);
 
-  heightToolbar: string = '48px';
+  heightToolbar = '48px';
 
   position: 'left' | 'right' = 'right';
 
-  @Input()
-  animationDisabled: boolean = false;
+  readonly animationDisabled = input<boolean>(false);
 
   animatedFrom: 'left' | 'right' | null = null;
 
-  constructor(private el: ElementRef) {}
+  readonly color = input<ThemePalette>('primary');
+
+  readonly disabled = input<boolean | null>(false);
+
+  // Host bindings for positioning
+  @HostBinding('style.margin-right.px')
+  marginRight = 0;
+
+  @HostBinding('style.flex-grow')
+  flexGrow = 0;
+
+  @HostBinding('style.left.px')
+  left = 0;
 
   ngAfterViewInit(): void {
     const parentElement = this.el.nativeElement.parentElement;
+    if (!parentElement) {
+      return;
+    }
+
     const parentStyle = getComputedStyle(parentElement);
     this.position = parentElement.childNodes[0] === this.el.nativeElement ? 'left' : 'right';
     this.animatedFrom = this.position;
+
     if (this.position === 'left') {
       this.overlayPositions = [{ originY: 'top', originX: 'start', overlayY: 'top', overlayX: 'start' }];
       this.flexGrow = 0;
       this.left = -parseFloat(parentStyle.paddingLeft);
-    } else { // We're right
+    } else {
       this.overlayPositions = [{ originY: 'top', originX: 'end', overlayY: 'top', overlayX: 'end' }];
       this.flexGrow = 1;
-      this.marginRight = -parseFloat(parentStyle.paddingRight);;
+      this.marginRight = -parseFloat(parentStyle.paddingRight);
     }
-    if (this.animationDisabled) {
+
+    if (this.animationDisabled()) {
       this.animatedFrom = null;
     }
-    this.matRowElement = this.el.nativeElement.closest('tr[mat-row], mat-row');
-    this.matRowElement.addEventListener('mouseenter', () => {
-      const parentStyle = getComputedStyle(parentElement);
-      this.heightToolbar = parentStyle.height;
+
+    this.matRowElement = this.el.nativeElement.closest('tr[mat-row], mat-row') as HTMLElement | null;
+    if (!this.matRowElement) {
+      return;
+    }
+
+    this.mouseEnterListener = () => {
+      const currentParentStyle = getComputedStyle(parentElement);
+      this.heightToolbar = currentParentStyle.height;
       this.open$.next(true);
       document.addEventListener('mousemove', this.mouseMoveListener);
+    };
+
+    this.matRowElement.addEventListener('mouseenter', this.mouseEnterListener);
+
+    // Cleanup on destroy
+    this.destroyRef.onDestroy(() => {
+      this.open$.complete();
+      document.removeEventListener('mousemove', this.mouseMoveListener);
+      if (this.matRowElement && this.mouseEnterListener) {
+        this.matRowElement.removeEventListener('mouseenter', this.mouseEnterListener);
+      }
     });
   }
 
-  mouseMoveListener: EventListenerOrEventListenerObject = ($event: any) => {
+  private readonly mouseMoveListener = (event: MouseEvent): void => {
     if (this.matRowElement) {
       const rect = this.matRowElement.getBoundingClientRect();
-      const isInHorizontalBounds = $event.clientX >= rect.left && $event.clientX <= rect.right;
-      const isInVerticalBounds = $event.clientY >= rect.top && $event.clientY <= rect.bottom;
+      const isInHorizontalBounds = event.clientX >= rect.left && event.clientX <= rect.right;
+      const isInVerticalBounds = event.clientY >= rect.top && event.clientY <= rect.bottom;
       if (isInHorizontalBounds && isInVerticalBounds) {
         return;
       }
     }
     this.open$.next(false);
     document.removeEventListener('mousemove', this.mouseMoveListener);
-  }
-
-  // We're right
-  @HostBinding('style.margin-right.px')
-  marginRight: number = 0;
-  @HostBinding('style.flex-grow')
-  flexGrow: number = 0;
-
-  // We're left
-  @HostBinding('style.left.px')
-  left: number = 0;
-
-
-  @Input()
-  color: ThemePalette = 'primary';
-
-  @Input()
-  disabled: boolean | null = false;
+  };
 }

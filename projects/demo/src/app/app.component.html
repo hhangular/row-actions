@@ -68,7 +68,7 @@
       </div>
 
       <!-- Demo Table -->
-      <p class="demo-hint">Hover over a row to see the actions appear</p>
+      <p class="demo-hint">Hover over a row to see the actions appear. Notice how the toolbar appears from the <strong>left</strong> on the Name column and from the <strong>right</strong> on Email and Actions columns, depending on the position of <code>&lt;row-actions&gt;</code> within the cell.</p>
 
       <div class="demo-table-wrapper">
         <mat-table [dataSource]="dataSource" class="demo-table">
@@ -79,12 +79,26 @@
 
           <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-            <mat-cell *matCellDef="let user">{{ user.name }}</mat-cell>
+            <mat-cell *matCellDef="let user">
+              <row-actions>
+                <button mat-icon-button (click)="onEdit(user)" title="Edit">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </row-actions>
+              {{ user.name }}
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="email">
             <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
-            <mat-cell *matCellDef="let user">{{ user.email }}</mat-cell>
+            <mat-cell *matCellDef="let user">
+              {{ user.email }}
+              <row-actions>
+                <button mat-icon-button (click)="onEdit(user)" title="Edit">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </row-actions>
+            </mat-cell>
           </ng-container>
 
           <ng-container matColumnDef="role">
@@ -187,6 +201,28 @@
           </tbody>
         </table>
       </div>
+    </section>
+
+    <!-- Position Behavior Section -->
+    <section class="section">
+      <h2>Position Behavior</h2>
+      <p>The toolbar automatically detects its position within the cell and animates accordingly:</p>
+      <ul class="feature-list">
+        <li><strong>First child</strong> in cell → Toolbar appears from the <strong>left</strong></li>
+        <li><strong>Last child</strong> in cell → Toolbar appears from the <strong>right</strong></li>
+      </ul>
+      <p>You can place <code>&lt;row-actions&gt;</code> in any cell of your table, not just a dedicated "actions" column. This allows you to add contextual actions to specific data columns.</p>
+      <pre ngNonBindable><code class="language-html">&lt;!-- Toolbar from LEFT --&gt;
+&lt;mat-cell *matCellDef="let element"&gt;
+  &lt;row-actions&gt;...&lt;/row-actions&gt;
+  {{ element.name }}
+&lt;/mat-cell&gt;
+
+&lt;!-- Toolbar from RIGHT --&gt;
+&lt;mat-cell *matCellDef="let element"&gt;
+  {{ element.name }}
+  &lt;row-actions&gt;...&lt;/row-actions&gt;
+&lt;/mat-cell&gt;</code></pre>
     </section>
 
     <!-- Card Footer -->

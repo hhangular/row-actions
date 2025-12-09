@@ -129,6 +129,17 @@
     color: var(--text-secondary);
     margin: 0 0 12px 0;
   }
+
+  ul.feature-list {
+    color: var(--text-secondary);
+    margin: 0 0 16px 0;
+    padding-left: 24px;
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+  }
 }
 
 // API Table
