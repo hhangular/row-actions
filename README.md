@@ -1,198 +1,157 @@
-# Row-actions
+<p align="center">
+  <a href="https://www.softwarity.io/">
+    <img src="https://www.softwarity.io/img/softwarity.svg" alt="Softwarity" height="60">
+  </a>
+</p>
 
-[![Build hhangular/row-actions](https://github.com/hhangular/row-actions/actions/workflows/main.yml/badge.svg)](https://github.com/hhangular/row-actions/actions/workflows/main.yml)
+# @hhangular/row-actions
 
-[![Publish hhangular/row-actions to NPM](https://github.com/hhangular/row-actions/actions/workflows/tag.yml/badge.svg)](https://github.com/hhangular/row-actions/actions/workflows/tag.yml)
+<p align="center">
+  <a href="https://www.npmjs.com/package/@hhangular/row-actions">
+    <img src="https://img.shields.io/npm/v/@hhangular/row-actions?color=blue&label=npm" alt="npm version">
+  </a>
+  <a href="https://github.com/hhangular/row-actions/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue" alt="license">
+  </a>
+  <a href="https://github.com/hhangular/row-actions/actions/workflows/main.yml">
+    <img src="https://github.com/hhangular/row-actions/actions/workflows/main.yml/badge.svg" alt="build status">
+  </a>
+</p>
 
-[![npm version](https://badge.fury.io/js/@hhangular%2Frow-actions.svg)](https://badge.fury.io/js/@hhangular%2Frow-actions)
+An Angular component that displays a collapsible action toolbar when hovering over a `mat-table` row. The buttons appear with a smooth animation from the edge of the cell.
 
-## Button bar collapsable component on your table effortlessly
+**[Live Demo](https://hhangular.github.io/row-actions/)** | **[Release Notes](RELEASE_NOTES.md)**
 
-This library contains an standalone angular component `RowActionsComponet` that allows you to add a collapsable toolbar actions in angular material table.   
+<p align="center">
+  <a href="https://hhangular.github.io/row-actions/">
+    <img src="preview.png" alt="Row Actions Preview" width="800">
+  </a>
+</p>
 
-# Demo
+## Features
 
-![](screenshot.png "Click on bellow for see in action")
-
-[stackblitz](https://stackblitz.com/edit/hhangular-row-actions?file=src%2Fmain.ts)
-
-
-## Component
-
- - **row-actions** is the main component
-
-```html
-            <ng-container matColumnDef="updated" stickyEnd>
-                <mat-header-cell *matHeaderCellDef i18n="@@UPDATED">Updated</mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    {{element.updatedBy }}
-                    <row-actions>
-                      <button mat-icon-button>
-                    </row-actions>
-...
-```
+- **Collapsible Toolbar** - Action buttons appear on row hover with smooth animation
+- **Flexible Positioning** - Toolbar can appear from left or right depending on placement
+- **Angular Material Integration** - Uses `mat-toolbar` with theme support (primary, accent, warn)
+- **Standalone Component** - Easy to import in any Angular 17+ application
+- **Lightweight** - No additional dependencies beyond Angular Material
 
 ## Installation
 
-For help getting started with a new Angular app, check out the [Angular CLI](https://cli.angular.io/).
-
-For existing apps, follow these steps to begin using `@hhangular/row-actions` in your Angular app.
-
-## Install @hhangular/row-actions
-
-You can use either the npm or yarn command-line tool to install the `package`.    
-Use whichever is appropriate for your project in the examples below.
-
-### NPM
-
 ```bash
-# @hhangular/row-actions
-npm install @hhangular/row-actions --save 
+npm install @hhangular/row-actions
 ```
 
-### YARN
+### Peer Dependencies
 
-```bash
-# @hhangular/row-actions
-yarn add @hhangular/row-actions
-```
+| Package | Version |
+|---------|---------|
+| @angular/common | >= 17.0.0 |
+| @angular/core | >= 17.0.0 |
+| @angular/cdk | >= 17.0.0 |
+| @angular/material | >= 17.0.0 |
+| @angular/animations | >= 17.0.0 |
 
-### Peer dependence
+## Usage
 
-| name | version |
-|---|---|
-| @angular/common | ^17.0.0 |
-| @angular/core | ^17.0.0 |
-| @angular/material | ^17.0.0 |
+Import the standalone component in your component:
 
-
-## Configuration
-
-Just import the standalone component `RowActionsComponent` and you can use the `component`.   
-You can do this in your `AppModule`, in your `SharedModule` indifferently or directly in other standalone component.
-
-`Component.ts`
 ```typescript
-// ================= IMPORT =================
-import {RowActionsComponent} from '@hhangular/row-actions';
+import { RowActionComponent } from '@hhangular/row-actions';
 
 @Component({
-  selector: 'app-demo',
+  selector: 'app-my-component',
   standalone: true,
-  imports: [RowActionsComponent],
-  template: `
-  ...
-  `,
+  imports: [RowActionComponent],
+  template: `...`
 })
-export class Component {
-  ...
-}
+export class MyComponent {}
 ```
 
-
-`AppModule.ts`
-```typescript
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {CommonModule} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
-import {AppComponent} from './app.component';
-// ================= IMPORT =================
-import {RowActionsComponent} from '@hhangular/row-actions';
-
-@NgModule({
-  declarations: [
-    AppComponent,
-  ],
-  imports: [
-    BrowserModule,
-    CommonModule,
-    HttpClientModule,
-// ================= IMPORT =================
-    RowActionsComponent,
-  ],
-  bootstrap: [AppComponent],
-  providers: []
-})
-export class AppModule {
-}
-```
-
---- 
-
-`SharedModule.ts`
-```typescript
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-// ================= IMPORT =================
-import {RowActionsComponent} from '@hhangular/row-actions';
-
-@NgModule({
-  imports: [
-    CommonModule,
-// ================= IMPORT =================
-    RowActionsComponent,
-  ],
-  exports: [
-// ================= EXPORT =================
-    RowActionsComponent,
-  ],
-  declarations: [],
-})
-export class SharedModule {
-}
-```
-
-# Use
-
-The use of 'Component': `row-actions` is very simple.
-
-## Use cases
-You want to add a collapsable toolbar on each row to you mat-table
-
----
-
-In a component template just add <row-actions> in cell with row position where you want that the toolbar appear.
-If you put the <row-actions> in the first position, the toolbar will be appear from left, if you put the <row-actions> in last position,  the toolbar will be appear from right.
-
+Add the `<row-actions>` component inside a `mat-cell`:
 
 ```html
-            <ng-container matColumnDef="updated" stickyEnd>
-                <mat-header-cell *matHeaderCellDef i18n="@@UPDATED">Updated</mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    {{element.updatedBy }}
-                    <!-- IN THIS CASE THE TOOLBAR APPEAR FROM RIGHT -->
-                    <row-actions>
-                      <!-- ADD YOUR BUTTONS mat-icon-button HERE -->
-                      <button mat-icon-button>
-                    </row-actions>
+<mat-table [dataSource]="dataSource">
+  <!-- Other columns... -->
+
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.lastUpdated }}
+      <row-actions>
+        <button mat-icon-button (click)="edit(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="delete(element)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </row-actions>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
 ```
+
+## API
+
+### Inputs
+
+| Input | Type | Default | Description |
+|-------|------|---------|-------------|
+| `color` | `'primary' \| 'accent' \| 'warn'` | `'primary'` | Toolbar color (Angular Material theme) |
+| `disabled` | `boolean` | `false` | Disables the component (hides it completely) |
+| `animationDisabled` | `boolean` | `false` | Disables the expansion animation (set at initialization only) |
+
+### Position Behavior
+
+The toolbar automatically detects its position within the cell:
+- **First child** in cell: Toolbar appears from the **left**
+- **Last child** in cell: Toolbar appears from the **right**
+
+## Examples
+
+### Basic Usage (Right-aligned)
 
 ```html
-            <ng-container matColumnDef="updated" stickyEnd>
-                <mat-header-cell *matHeaderCellDef i18n="@@UPDATED">Updated</mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <!-- IN THIS CASE THE TOOLBAR APPEAR FROM LEFT -->
-                    <row-actions>
-                      <!-- ADD YOUR BUTTONS mat-icon-button HERE -->
-                      <button mat-icon-button>
-                    </row-actions>
-                    {{element.updatedBy }}
+<mat-cell *matCellDef="let element">
+  {{ element.name }}
+  <row-actions>
+    <button mat-icon-button><mat-icon>edit</mat-icon></button>
+    <button mat-icon-button><mat-icon>delete</mat-icon></button>
+  </row-actions>
+</mat-cell>
 ```
 
-
-## Inputs
+### Left-aligned Toolbar
 
 ```html
-<row-actions color="warn">...</row-actions>
-<row-actions [color]="'primary'">...</row-actions>
+<mat-cell *matCellDef="let element">
+  <row-actions>
+    <button mat-icon-button><mat-icon>edit</mat-icon></button>
+    <button mat-icon-button><mat-icon>delete</mat-icon></button>
+  </row-actions>
+  {{ element.name }}
+</mat-cell>
 ```
 
-| name | description | type | sample |
-|---|---|---|---|
-| color | The row-actions color | ThemePalette = 'primary' \| 'accent' \| 'warn' \| undefined | 'warn' |
+### With Custom Color
 
+```html
+<row-actions color="warn">
+  <button mat-icon-button><mat-icon>delete</mat-icon></button>
+</row-actions>
+```
 
-## Outputs
+### Conditionally Disabled
 
-no
+```html
+<row-actions [disabled]="!hasPermission">
+  <button mat-icon-button><mat-icon>edit</mat-icon></button>
+</row-actions>
+```
+
+## License
+
+MIT
