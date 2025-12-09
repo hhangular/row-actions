@@ -20,6 +20,21 @@
 
 An Angular component that displays a collapsible action toolbar when hovering over a `mat-table` row. The buttons appear with a smooth animation from the edge of the cell.
 
+# @hhangular/row-actions
+
+> ⚠️ **This package has been renamed**
+>
+> `@hhangular/row-actions` has moved to [`@softwarity/row-actions`](https://www.npmjs.com/package/@softwarity/row-actions).
+>
+> Please update your dependencies:
+>
+> ```bash
+> npm uninstall @hhangular/row-actions
+> npm install @softwarity/row-actions
+> ```
+>
+> For documentation and updates, visit the new repository: [github.com/softwarity/row-actions](https://github.com/softwarity/row-actions)
+
 **[Live Demo](https://hhangular.github.io/row-actions/)** | **[Release Notes](RELEASE_NOTES.md)**
 
 <p align="center">
