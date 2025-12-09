@@ -18,8 +18,8 @@
     "importHelpers": true,
     "target": "ES2022",
     "paths": {
-      "row-actions": [
-        "dist/row-actions"
+      "@hhangular/row-actions": [
+        "dist"
       ]
     },
     "module": "ES2022",
