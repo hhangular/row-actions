@@ -52,14 +52,14 @@ import { ThemePalette } from '@angular/material/core';
   ],
   animations: [
     trigger('expandFromRight', [
-      state('void', style({ transform: 'scaleX(0)', transformOrigin: 'right center' })),
-      state('right', style({ transform: 'scaleX(1)', transformOrigin: 'right center' })),
+      state('void', style({ clipPath: 'inset(0 0 0 100%)' })),
+      state('right', style({ clipPath: 'inset(0 0 0 0)' })),
       transition('void => right', animate('300ms ease-out')),
       transition('right => void', animate('300ms ease-in'))
     ]),
     trigger('expandFromLeft', [
-      state('void', style({ transform: 'scaleX(0)', transformOrigin: 'left center' })),
-      state('left', style({ transform: 'scaleX(1)', transformOrigin: 'left center' })),
+      state('void', style({ clipPath: 'inset(0 100% 0 0)' })),
+      state('left', style({ clipPath: 'inset(0 0 0 0)' })),
       transition('void => left', animate('300ms ease-out')),
       transition('left => void', animate('300ms ease-in'))
     ])

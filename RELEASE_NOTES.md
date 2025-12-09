@@ -1,5 +1,13 @@
 # Release Notes
 
+## 2.0.4
+
+### Improvements
+- **Improved animation** - Replaced `scaleX` animation with `clip-path` for smoother reveal effect without content distortion
+- **Code quality** - Migrated to Angular signals (`input()`), added `DestroyRef` for proper cleanup, improved typing
+
+---
+
 ## 2.0.3
 
 ### New Features
@@ -13,7 +21,7 @@
 
 ---
 
-## 2.0.1 (2024-01)
+## 2.0.1
 
 ### Improvements
 - Added compatibility with Angular 17+
