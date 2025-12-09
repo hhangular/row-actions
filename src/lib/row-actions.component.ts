@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AsyncPipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, HostBinding, inject, input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, ElementRef, HostBinding, inject, input } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
 import { BehaviorSubject } from 'rxjs';
@@ -70,6 +70,7 @@ export class RowActionComponent implements AfterViewInit {
 
   private readonly el = inject(ElementRef<HTMLElement>);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   private matRowElement: HTMLElement | null = null;
   private mouseEnterListener: (() => void) | null = null;
@@ -106,23 +107,28 @@ export class RowActionComponent implements AfterViewInit {
       return;
     }
 
-    const parentStyle = getComputedStyle(parentElement);
-    this.position = parentElement.childNodes[0] === this.el.nativeElement ? 'left' : 'right';
-    this.animatedFrom = this.position;
+    // Use setTimeout to defer host binding updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => {
+      const parentStyle = getComputedStyle(parentElement);
+      this.position = parentElement.childNodes[0] === this.el.nativeElement ? 'left' : 'right';
+      this.animatedFrom = this.position;
 
-    if (this.position === 'left') {
-      this.overlayPositions = [{ originY: 'top', originX: 'start', overlayY: 'top', overlayX: 'start' }];
-      this.flexGrow = 0;
-      this.left = -parseFloat(parentStyle.paddingLeft);
-    } else {
-      this.overlayPositions = [{ originY: 'top', originX: 'end', overlayY: 'top', overlayX: 'end' }];
-      this.flexGrow = 1;
-      this.marginRight = -parseFloat(parentStyle.paddingRight);
-    }
+      if (this.position === 'left') {
+        this.overlayPositions = [{ originY: 'top', originX: 'start', overlayY: 'top', overlayX: 'start' }];
+        this.flexGrow = 0;
+        this.left = -parseFloat(parentStyle.paddingLeft);
+      } else {
+        this.overlayPositions = [{ originY: 'top', originX: 'end', overlayY: 'top', overlayX: 'end' }];
+        this.flexGrow = 1;
+        this.marginRight = -parseFloat(parentStyle.paddingRight);
+      }
 
-    if (this.animationDisabled()) {
-      this.animatedFrom = null;
-    }
+      if (this.animationDisabled()) {
+        this.animatedFrom = null;
+      }
+
+      this.cdr.markForCheck();
+    });
 
     this.matRowElement = this.el.nativeElement.closest('tr[mat-row], mat-row') as HTMLElement | null;
     if (!this.matRowElement) {

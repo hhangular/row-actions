@@ -6,6 +6,17 @@
 - **Improved animation** - Replaced `scaleX` animation with `clip-path` for smoother reveal effect without content distortion
 - **Code quality** - Migrated to Angular signals (`input()`), added `DestroyRef` for proper cleanup, improved typing
 
+### Testing
+- **Unit tests** - Added comprehensive test suite with 23 tests covering:
+  - Row-actions display on hover
+  - Position detection (left/right)
+  - Vertical and horizontal alignment
+  - Mouse interactions
+  - Multiple rows behavior
+  - Content projection
+- **CI/CD** - Tests integrated in GitHub Actions workflow with coverage reports
+- **Coverage** - 94%+ statement coverage
+
 ---
 
 ## 2.0.3

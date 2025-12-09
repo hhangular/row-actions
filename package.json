@@ -26,7 +26,7 @@
     "cp:archway-ui": "cp -r dist/* ../../softwarity/archway/archway-ui/node_modules/@hhangular/row-actions/",
     "watch": "ng build row-actions --watch --configuration development",
     "test": "cross-env CHROME_BIN='/usr/bin/google-chrome' ng test",
-    "test:ci": "ng test"
+    "test:ci": "ng test --no-watch --browsers=ChromeHeadless"
   },
   "dependencies": {
     "tslib": "^2.6.2"
